@@ -1,0 +1,45 @@
+{
+  "name": "nice-forms.css",
+  "description": "A base CSS file for forms and input elements",
+  "author": "Niels Voogt <n.voogt@gmail.com>",
+  "license": "MIT",
+  "main": "dist/nice-forms.css",
+  "version": "0.1.7",
+  "directories": {
+    "doc": "docs"
+  },
+  "bugs": {
+    "url": "https://github.com/nielsVoogt/nice-forms.css/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nielsVoogt/nice-forms.css"
+  },
+  "homepage": "https://nielsvoogt.github.io/nice-forms.css/",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "scripts": {
+    "dev": "gulp watch",
+    "dist": "gulp compile-dist"
+  },
+  "keywords": [
+    "forms",
+    "css",
+    "input fields"
+  ],
+  "devDependencies": {
+    "autoprefixer": "^9.0.0",
+    "browser-sync": "^2.26.14",
+    "cssnano": "^4.1.10",
+    "gulp": "^4.0.2",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^5.0.0",
+    "sass": "^1.32.8"
+  },
+  "dependencies": {}
+}
