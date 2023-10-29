@@ -16,6 +16,13 @@
       <ul id="menu">
         <li>
           <a>
+            <i class="ai-frame"></i>
+            <span>ابعاد</span>
+          </a>
+        </li>
+        <li></li>
+        <li>
+          <a>
             <i class="ai-coin"></i>
             <span>سعر / cm</span>
           </a>
@@ -46,25 +53,23 @@
         </li>
         <li>
           <a>
-            <i class="ai-frame"></i>
+            <i class="ai-more-horizontal-fill"></i>
             <span>تفاصيل</span>
-          </a>
-        </li>
-        <li>
-          <a>
-            <i class="ai-gear"></i>
-            <span>Settings</span>
-          </a>
-        </li>
-        <li>
-          <a>
-            <i class="ai-person"></i>
-            <span>Profile</span>
           </a>
         </li>
       </ul>
       <div id="main-form">
-        <h1>سعر / cm</h1>
+        <h1>ابعاد</h1>
+        <div class="nested-form" name="ابعاد">
+          <div class="nice-form-group">
+            <label>طول</label>
+            <input type="number" />
+          </div>
+          <div class="nice-form-group">
+            <label>عرض</label>
+            <input type="number" />
+          </div>
+        </div>
         <div class="nested-form" name="سعر / cm">
           <div class="nice-form-group">
             <input disabled type="number" class="price-input" />
@@ -141,27 +146,28 @@
         </div>
         <div class="nested-form" name="تفاصيل">
           <div class="nice-form-group">
-            <label>سعر</label>
-            <input type="number" class="price-input" />
+            <label>نسبة</label>
+            <input disabled type="number" class="price-input" />
             <small class="edit-price"> edit </small>
-            <fieldset class="nice-form-group">
-              <div class="nice-form-group">
-                <input checked type="radio" name="radio-3" id="r-7" />
-                <label for="r-7">كثير</label>
-              </div>
-              <div class="nice-form-group">
-                <input type="radio" name="radio-3" id="r-8" />
-                <label for="r-8">متوسط</label>
-              </div>
-              <div class="nice-form-group">
-                <input type="radio" name="radio-3" id="r-9" />
-                <label for="r-9">قليل</label>
-              </div>
-            </fieldset>
           </div>
+          <fieldset class="nice-form-group">
+            <div class="nice-form-group">
+              <input checked type="radio" name="radio-3" id="r-7" />
+              <label for="r-7">كثير</label>
+            </div>
+            <div class="nice-form-group">
+              <input type="radio" name="radio-3" id="r-8" />
+              <label for="r-8">متوسط</label>
+            </div>
+            <div class="nice-form-group">
+              <input type="radio" name="radio-3" id="r-9" />
+              <label for="r-9">قليل</label>
+            </div>
+          </fieldset>
         </div>
       </div>
     </div>
+    <h2>السعر النهائي</h2>
     <script src="../src/forms.js"></script>
     <script src="../src/getIcons.js"></script>
   </body>

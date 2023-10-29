@@ -12,13 +12,18 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   text-align: right;
+  background-color: #f2f5f7;
 }
 
 .container {
   display: flex;
   padding-top: 5vh;
   padding-bottom: 5vh;
-  background-color: #f2f5f7;
+}
+
+h2 {
+  margin-top: 20px;
+  margin-right: 100px;
 }
 
 ul {
@@ -28,17 +33,11 @@ ul {
   background-color: #05043e;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  align-self: flex-start;
   padding: 0.75rem;
   border-radius: 10px;
   box-shadow: 0 10px 50px 0 rgba(#05043e, 0.25);
   margin-left: 15px;
-}
-
-li:nth-child(6) {
-  margin-top: 5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #363664;
 }
 
 li + li {
