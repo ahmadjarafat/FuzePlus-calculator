@@ -196,8 +196,26 @@ summary {
   margin-right: auto;
 }
 
+.nested-form {
+  display: flex;
+  flex-direction: column;
+}
+
+fieldset {
+  border: 0;
+  direction: rtl;
+}
+
 input {
-  text-align: right;
+  direction: rtl;
+  &:disabled {
+    background-color: #ccc !important;
+  }
+}
+
+.edit-price {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 @keyframes scale {

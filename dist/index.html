@@ -13,90 +13,156 @@
   </head>
   <body>
     <div class="container">
-      <ul>
+      <ul id="menu">
         <li>
-          <a href="#">
+          <a>
             <i class="ai-coin"></i>
-            <span>سعر cm</span>
+            <span>سعر / cm</span>
           </a>
         </li>
         <li>
-          <a href="#">
-            <i class="ai-pin"></i>
-            <span>علاقة</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
+          <a>
             <i class="ai-align-vertical-center"></i>
             <span>محول</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a>
+            <i class="ai-pin"></i>
+            <span>علاقة</span>
+          </a>
+        </li>
+        <li>
+          <a>
             <i class="ai-width"></i>
             <span>سبيسر</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a>
             <i class="ai-language"></i>
-            <span>لغة</span>
+            <span>اللغة</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a>
             <i class="ai-frame"></i>
             <span>تفاصيل</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a>
             <i class="ai-gear"></i>
             <span>Settings</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a>
             <i class="ai-person"></i>
             <span>Profile</span>
           </a>
         </li>
       </ul>
       <div id="main-form">
-        <h1>سعر</h1>
-        <div name="سعر">
+        <h1>سعر / cm</h1>
+        <div class="nested-form" name="سعر / cm">
           <div class="nice-form-group">
-            <label>سعر / cm^2</label>
-            <input type="text" />
+            <input disabled type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
           </div>
         </div>
-        <div name="محول">
+        <div class="nested-form" name="محول">
           <div class="nice-form-group">
-            <label>سعر / cm^2</label>
-            <input type="text" />
+            <label>سعر</label>
+            <input disabled type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
           </div>
-        </div>
-        <div name="علاقة">
           <div class="nice-form-group">
-            <label>سعر / cm^2</label>
-            <input type="text" />
+            <label>عدد</label>
+            <input type="number" />
           </div>
-          <div name="سبيسر">
+          <fieldset class="nice-form-group">
             <div class="nice-form-group">
-              <label>سعر / cm^2</label>
-              <input type="text" />
+              <input checked type="radio" name="radio-1" id="r-1" />
+              <label for="r-1">كبير</label>
             </div>
-            <div name="اللغة">
+            <div class="nice-form-group">
+              <input type="radio" name="radio-1" id="r-2" />
+              <label for="r-2"> متوسط </label>
+            </div>
+            <div class="nice-form-group">
+              <input type="radio" name="radio-1" id="r-3" />
+              <label for="r-3"> صغير </label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="nested-form" name="علاقة">
+          <div class="nice-form-group">
+            <label>سعر</label>
+            <input disabled type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
+          </div>
+          <div class="nice-form-group">
+            <label>عدد</label>
+            <input type="number" />
+          </div>
+        </div>
+        <div class="nested-form" name="سبيسر">
+          <div class="nice-form-group">
+            <label>سعر</label>
+            <input disabled type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
+          </div>
+          <div class="nice-form-group">
+            <label>عدد</label>
+            <input type="number" />
+          </div>
+        </div>
+        <div class="nested-form" name="اللغة">
+          <div class="nice-form-group">
+            <label>سعر</label>
+            <input disabled type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
+          </div>
+          <fieldset class="nice-form-group">
+            <div class="nice-form-group">
+              <input checked type="radio" name="radio-2" id="r-4" />
+              <label for="r-4">عربي</label>
+            </div>
+            <div class="nice-form-group">
+              <input type="radio" name="radio-2" id="r-5" />
+              <label for="r-5">انجليزي</label>
+            </div>
+            <div class="nice-form-group">
+              <input type="radio" name="radio-2" id="r-6" />
+              <label for="r-6">انجليزي مشبك</label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="nested-form" name="تفاصيل">
+          <div class="nice-form-group">
+            <label>سعر</label>
+            <input type="number" class="price-input" />
+            <small class="edit-price"> edit </small>
+            <fieldset class="nice-form-group">
               <div class="nice-form-group">
-                <label>سعر / cm^2</label>
-                <input type="text" />
+                <input checked type="radio" name="radio-3" id="r-7" />
+                <label for="r-7">كثير</label>
               </div>
-            </div>
+              <div class="nice-form-group">
+                <input type="radio" name="radio-3" id="r-8" />
+                <label for="r-8">متوسط</label>
+              </div>
+              <div class="nice-form-group">
+                <input type="radio" name="radio-3" id="r-9" />
+                <label for="r-9">قليل</label>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
     </div>
+    <script src="../src/forms.js"></script>
     <script src="../src/getIcons.js"></script>
   </body>
 </html>
