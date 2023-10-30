@@ -5,10 +5,9 @@ const formsState = {
   سبيسر: { سعر: 0, عدد: 0 },
   اللغة: {
     curr: "عربي",
-    مشبك: true,
-    سعر: { انجليزي: 0, عربي: 0, "انجليزي مشبك": 0 },
+    النسبة: { انجليزي: 0, عربي: 0, "انجليزي مشبك": 0 },
   },
-  تفاصيل: { curr: "كثير", سعر: { كثير: 0, متوسط: 0, قليل: 0 } },
+  تفاصيل: { curr: "كثير", النسبة: { كثير: 0, متوسط: 0, قليل: 0 } },
   ابعاد: { طول: 0, عرض: 0 },
 };
 
@@ -27,13 +26,13 @@ handleHashChange();
 //enable price input when edit is clicked, also disable fieldset
 const priceEdits = document.getElementsByClassName("edit-price");
 for (let i = 0; i < priceEdits.length; i++) {
-  priceEdits[i].addEventListener("click", handlePriceEdit);
+  priceEdits[i].addEventListener("click", handleEditMode);
 }
 
 //do the opposite of edit when the price input losses focus
-const priceInputs = document.getElementsByClassName("price-input");
+const priceInputs = document.getElementsByClassName("editable-price");
 for (let i = 0; i < priceInputs.length; i++) {
-  priceInputs[i].addEventListener("focusout", handlePriceEditFinish);
+  priceInputs[i].addEventListener("focusout", handleEditModeFinish);
 }
 
 //show appropriate form when the fragment changes
@@ -74,15 +73,19 @@ function handleRadioChnage(e) {
   const label = e.target.parentNode.querySelector("label");
   const currForm = e.target.closest(".nested-form");
   const formName = currForm.getAttribute("name");
-  const priceInput = currForm.querySelector(".price-input");
-  console.log(priceInput);
+  const priceInput = currForm.querySelector(".editable-price");
 
   //set current option
   const type = label.textContent.trim();
   formsState[formName].curr = type;
   if (priceInput) {
-    priceInput.value = formsState[formName]["سعر"][type];
+    //TODO : modify to work for any editable type
+    const editable =
+      formsState[formName]["سعر"] || formsState[formName]["النسبة"];
+    console.log(editable);
+    priceInput.value = editable[type];
   }
+
   calculate();
 }
 
@@ -91,9 +94,15 @@ function handleNumInputChange(e) {
   const label = e.target.parentNode.querySelector("label");
   const formName = e.target.closest(".nested-form").getAttribute("name");
 
+  if (e.target.value === "") {
+    e.target.value = 0;
+  }
+
+  e.target.value = parseFloat(e.target.value);
+
   if (label) {
     if (
-      label.textContent === "سعر" &&
+      e.target.classList.contains("editable-price") &&
       formsState[formName].curr !== undefined
     ) {
       //this means it's a price input
@@ -109,38 +118,12 @@ function handleNumInputChange(e) {
   calculate();
 }
 
-// function handleFormChange(e) {
-//   //get state associated with current input
-//   const label = e.target.parentNode.getElementsByTagName("label")[0];
-//   const formName = e.target.closest(".nested-form").getAttribute("name");
-
-//   //assign value according to input type
-//   if (label) {
-//     if (e.target.type === "radio") {
-//       formsState[formName].curr = label.textContent;
-//     } else {
-//       //means that this is a price input for a given radio type
-//       if (
-//         formsState[formName].curr !== undefined &&
-//         label.textContent === "سعر"
-//       ) {
-//         const type = formsState[formName].curr;
-//         formsState[formName][label.textContent][type] = e.target.value;
-//       } else {
-//         formsState[formName][label.textContent] = e.target.value;
-//       }
-//     }
-//   } else {
-//     formsState[formName] = e.target.value;
-//   }
-
-//   console.log(formsState);
-// }
-
-function handlePriceEdit(e) {
-  const currInput = e.target.parentNode.querySelector(".price-input");
+//activate edit mode
+function handleEditMode(e) {
+  const currInput = e.target.parentNode.querySelector(".editable-price");
   currInput.disabled = false;
   currInput.focus();
+
   const currRadioInputs = e.target
     .closest(".nested-form")
     .querySelector("fieldset");
@@ -150,7 +133,8 @@ function handlePriceEdit(e) {
   }
 }
 
-function handlePriceEditFinish(e) {
+//deactivate edit mode
+function handleEditModeFinish(e) {
   e.target.disabled = true;
 
   const currRadioInputs = e.target
@@ -162,12 +146,64 @@ function handlePriceEditFinish(e) {
   }
 }
 
+//calculate final price and show it
 function calculate(e) {
-  const finalPrice =
+  const cmPrice =
     (formsState["سعر / cm"] *
       formsState["ابعاد"]["طول"] *
       formsState["ابعاد"]["عرض"]) /
     100;
 
+  const cmPriceWithProfit =
+    cmPrice *
+    (1 +
+      (parseFloat(formsState["تفاصيل"]["النسبة"][formsState["تفاصيل"].curr]) +
+        parseFloat(formsState["اللغة"]["النسبة"][formsState["اللغة"].curr])) /
+        100);
+
+  const transformersPrice =
+    formsState["محول"]["سعر"][formsState["محول"].curr] *
+    formsState["محول"]["عدد"];
+
+  console.log(transformersPrice);
+
+  const spacersPrice = formsState["سبيسر"]["سعر"] * formsState["سبيسر"]["عدد"];
+
+  console.log(spacersPrice);
+
+  const hangersPrice = formsState["علاقة"]["سعر"] * formsState["علاقة"]["عدد"];
+
+  let finalPrice =
+    cmPriceWithProfit + transformersPrice + spacersPrice + hangersPrice;
+
+  finalPrice = Math.round(finalPrice * 10) / 10;
   finalPriceElement.textContent = `${finalPrice} : السعر النهائي`;
 }
+
+// function handleLocalStorage() {
+//   const localStorageObject = localStorage.getItem("stateObject");
+//   if (localStorageObject !== null) {
+//     traverseStateObject(JSON.parse(localStorageObject));
+//   }
+// }
+
+// // Helper function
+// function traverseStateObject(obj) {
+//   const copy = {}; // Create an empty object to store the copy
+//   for (const prop in obj) {
+//     if (obj.hasOwnProperty(prop)) {
+//       if (typeof obj[prop] === "object") {
+//         // If the property is an object, recursively copy it
+//         copy[prop] = copyObject(obj[prop]);
+//       } else {
+//         // If it's not an object, copy the property to the new object
+//         if (prop === "سعر" || "النسبة") {
+//           copy[prop] = obj[prop];
+//         }
+//       }
+//     }
+//   }
+//   return copy;
+// }
+
+// state
