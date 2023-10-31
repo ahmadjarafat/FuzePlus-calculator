@@ -20,7 +20,7 @@ for (let i = 0; i < links.length; i++) {
 }
 
 //set initial fragment identifier
-location.hash = "سعر / cm";
+location.hash = "ابعاد";
 handleHashChange();
 
 //enable price input when edit is clicked, also disable fieldset
@@ -44,10 +44,16 @@ for (let i = 0; i < fieldsets.length; i++) {
   fieldsets[i].addEventListener("change", handleRadioChnage);
 }
 
-//update change when number inputs chnages
+//update state when number inputs chnage
 const numInputs = document.querySelectorAll('input[type="number"]');
 for (let i = 0; i < numInputs.length; i++) {
   numInputs[i].addEventListener("change", handleNumInputChange);
+}
+
+//handle focus and unfocus of number inputs
+for (let i = 0; i < numInputs.length; i++) {
+  numInputs[i].addEventListener("focus", handleNumInputFocus);
+  numInputs[i].addEventListener("blur", handleNumInputBlur);
 }
 
 function handleHashChange() {
@@ -82,7 +88,7 @@ function handleRadioChnage(e) {
     //TODO : modify to work for any editable type
     const editable =
       formsState[formName]["سعر"] || formsState[formName]["النسبة"];
-    console.log(editable);
+
     priceInput.value = editable[type];
   }
 
@@ -97,8 +103,10 @@ function handleNumInputChange(e) {
   if (e.target.value === "") {
     e.target.value = 0;
   }
-
   e.target.value = parseFloat(e.target.value);
+  if (e.target.value < 0) {
+    e.target.value = 0;
+  }
 
   if (label) {
     if (
@@ -114,6 +122,8 @@ function handleNumInputChange(e) {
   } else {
     formsState[formName] = e.target.value;
   }
+
+  console.log(formsState);
 
   calculate();
 }
@@ -146,6 +156,18 @@ function handleEditModeFinish(e) {
   }
 }
 
+function handleNumInputFocus(e) {
+  if (e.target.value === "0") {
+    e.target.value = "";
+  }
+}
+
+function handleNumInputBlur(e) {
+  if (e.target.value === "") {
+    e.target.value = 0;
+  }
+}
+
 //calculate final price and show it
 function calculate(e) {
   const cmPrice =
@@ -165,11 +187,7 @@ function calculate(e) {
     formsState["محول"]["سعر"][formsState["محول"].curr] *
     formsState["محول"]["عدد"];
 
-  console.log(transformersPrice);
-
   const spacersPrice = formsState["سبيسر"]["سعر"] * formsState["سبيسر"]["عدد"];
-
-  console.log(spacersPrice);
 
   const hangersPrice = formsState["علاقة"]["سعر"] * formsState["علاقة"]["عدد"];
 
@@ -180,30 +198,43 @@ function calculate(e) {
   finalPriceElement.textContent = `${finalPrice} : السعر النهائي`;
 }
 
-// function handleLocalStorage() {
-//   const localStorageObject = localStorage.getItem("stateObject");
-//   if (localStorageObject !== null) {
-//     traverseStateObject(JSON.parse(localStorageObject));
-//   }
-// }
+function handleLocalStorage() {
+  const localStorageObject = localStorage.getItem("stateObject");
+  if (localStorageObject !== null) {
+    traverseStateObject(JSON.parse(localStorageObject));
+  }
+}
 
-// // Helper function
-// function traverseStateObject(obj) {
-//   const copy = {}; // Create an empty object to store the copy
-//   for (const prop in obj) {
-//     if (obj.hasOwnProperty(prop)) {
-//       if (typeof obj[prop] === "object") {
-//         // If the property is an object, recursively copy it
-//         copy[prop] = copyObject(obj[prop]);
-//       } else {
-//         // If it's not an object, copy the property to the new object
-//         if (prop === "سعر" || "النسبة") {
-//           copy[prop] = obj[prop];
-//         }
-//       }
-//     }
-//   }
-//   return copy;
-// }
+// Helper function
+function traverseStateObject(obj) {
+  const copy = {}; // Create an empty object to store the copy
+  for (const prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      if (typeof obj[prop] === "object") {
+        // If the property is an object, recursively copy it
+        copy[prop] = copyObject(obj[prop]);
+      } else {
+        // If it's not an object, copy the property to the new object
+        if (prop === "سعر" || prop === "النسبة" || prop === "curr") {
+          copy[prop] = obj[prop];
+        } else {
+          copy[prop] = 0;
+        }
+      }
+    }
+  }
+  return copy;
+}
 
-// state
+// const formsState = {
+//     محول: { curr: "كبير", سعر: { كبير: 0, متوسط: 0, صغير: 0 }, عدد: 0 },
+//     "سعر / cm": 0,
+//     علاقة: { سعر: 0, عدد: 0 },
+//     سبيسر: { سعر: 0, عدد: 0 },
+//     اللغة: {
+//       curr: "عربي",
+//       النسبة: { انجليزي: 0, عربي: 0, "انجليزي مشبك": 0 },
+//     },
+//     تفاصيل: { curr: "كثير", النسبة: { كثير: 0, متوسط: 0, قليل: 0 } },
+//     ابعاد: { طول: 0, عرض: 0 },
+//   };
