@@ -1,4 +1,4 @@
-const formsState = {
+let formsState = {
   محول: { curr: "كبير", سعر: { كبير: 0, متوسط: 0, صغير: 0 }, عدد: 0 },
   "سعر / cm": 0,
   علاقة: { سعر: 0, عدد: 0 },
@@ -18,6 +18,9 @@ const links = document.getElementById("menu").getElementsByTagName("a");
 for (let i = 0; i < links.length; i++) {
   links[i].href = `#${links[i].children[1].textContent}`;
 }
+
+//handle local storage if the app has been visited before
+handleLocalStorage();
 
 //set initial fragment identifier
 location.hash = "ابعاد";
@@ -93,6 +96,7 @@ function handleRadioChnage(e) {
   }
 
   calculate();
+  localStorage.setItem("stateObject", JSON.stringify(formsState));
 }
 
 function handleNumInputChange(e) {
@@ -123,9 +127,8 @@ function handleNumInputChange(e) {
     formsState[formName] = e.target.value;
   }
 
-  console.log(formsState);
-
   calculate();
+  localStorage.setItem("stateObject", JSON.stringify(formsState));
 }
 
 //activate edit mode
@@ -198,10 +201,52 @@ function calculate(e) {
   finalPriceElement.textContent = `${finalPrice} : السعر النهائي`;
 }
 
+// populate editable inputs with corresponding values from the state object
+function populateEditableInputs() {
+  const editableElements = document.querySelectorAll(".editable-price");
+  console.log(editableElements);
+
+  editableElements.forEach((element) => {
+    const nestedFormElement = element.closest(".nested-form");
+    const formName = nestedFormElement.getAttribute("name");
+
+    if (typeof formsState[formName] === "object") {
+      const editable =
+        formsState[formName]["سعر"] || formsState[formName]["النسبة"] || 0;
+
+      if (typeof editable === "object") {
+        element.value = editable[formsState[formName].curr];
+      } else {
+        element.value = editable;
+      }
+    } else if (formsState[formName] !== undefined) {
+      element.value = formsState[formName];
+    }
+
+    //set the current radio input on the UI
+    const fieldset = nestedFormElement.querySelector("fieldset");
+
+    if (fieldset) {
+      const controls = fieldset.querySelectorAll("div");
+      controls.forEach((control) => {
+        const name = control.querySelector("label").textContent.trim();
+        console.log(name, formsState[formName].curr);
+        if (name === formsState[formName].curr) {
+          control.querySelector("input").checked = true;
+        } else {
+          control.querySelector("input").checked = false;
+        }
+      });
+    }
+  });
+}
+
 function handleLocalStorage() {
   const localStorageObject = localStorage.getItem("stateObject");
   if (localStorageObject !== null) {
-    traverseStateObject(JSON.parse(localStorageObject));
+    formsState = traverseStateObject(JSON.parse(localStorageObject));
+    populateEditableInputs();
+    calculate();
   }
 }
 
@@ -212,29 +257,16 @@ function traverseStateObject(obj) {
     if (obj.hasOwnProperty(prop)) {
       if (typeof obj[prop] === "object") {
         // If the property is an object, recursively copy it
-        copy[prop] = copyObject(obj[prop]);
+        copy[prop] = traverseStateObject(obj[prop]);
       } else {
         // If it's not an object, copy the property to the new object
-        if (prop === "سعر" || prop === "النسبة" || prop === "curr") {
-          copy[prop] = obj[prop];
-        } else {
+        if (prop === "عرض" || prop === "عدد" || prop === "طول") {
           copy[prop] = 0;
+        } else {
+          copy[prop] = obj[prop];
         }
       }
     }
   }
   return copy;
 }
-
-// const formsState = {
-//     محول: { curr: "كبير", سعر: { كبير: 0, متوسط: 0, صغير: 0 }, عدد: 0 },
-//     "سعر / cm": 0,
-//     علاقة: { سعر: 0, عدد: 0 },
-//     سبيسر: { سعر: 0, عدد: 0 },
-//     اللغة: {
-//       curr: "عربي",
-//       النسبة: { انجليزي: 0, عربي: 0, "انجليزي مشبك": 0 },
-//     },
-//     تفاصيل: { curr: "كثير", النسبة: { كثير: 0, متوسط: 0, قليل: 0 } },
-//     ابعاد: { طول: 0, عرض: 0 },
-//   };
